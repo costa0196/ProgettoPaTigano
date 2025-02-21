@@ -22,11 +22,11 @@ Tutte le richieste devono essere validate e autorizzate mediante tokenJwt.
 
 ## Librerie/Framework
 
-• Node.Js
-• Express
-• Sequelize
-• MySQL
-• https://github.com/loks0n/rapid-draughts
+* Node.Js
+* Express
+* Sequelize
+* MySQL
+* (https://github.com/loks0n/rapid-draughts)
 
 ## Rotte
 
