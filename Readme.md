@@ -37,7 +37,7 @@ Tutte le richieste devono essere validate e autorizzate mediante tokenJwt.
 | Post    | /Abbandona |
 | Post    | /Ricarica|
 | Get     | /visualizzaStorico|
-! Get     | /visualizzaStatoPartita|
+| Get     | /visualizzaStatoPartita|
 
 
 Tutte le rotte presenti hanno bisogno di autentificazione tramite TokenJwt. Il progetto considera un login già effettuato. 
@@ -82,7 +82,7 @@ Permette di visualizzare lo storico per una data partita.
 ### • /visualizzaStatoPartita
 Permette la visualizzazione dello stato di una partita. Esso può essere: Win,Lose,Interrotta,In corso.
 
-Inoltre sono state create altre due ulteriori rotte:visualizzaPartite e visualizzaUtenti per rendere più semplice la lettura di riuscita di alcune specifiche. Tali rotte hanno sempre un'autorizzazione tramite tokenJwt.
+Inoltre sono state create altre due ulteriori rotte:/visualizzaPartite e /visualizzaUtenti per rendere più semplice la lettura di alcune specifiche. Tali rotte hanno sempre un'autorizzazione tramite tokenJwt.
 
 # Progettazione
 ## UseCaseDiagram
@@ -101,5 +101,5 @@ Il diagramma delle sequenze risulta essere circa uguale per tutte le rotte. Dunq
 
 **MVC:**Pattern utilizzato per dividere la logica di gestione dei dati. Si basa su tre componenti principali: Model,View,Controller. Il model si occupa di definire modelli che sono mappati con i dati del database e permette le operazioni inerenti ai dati. La view invece si occupa dalla presentazione dei dati a livello di interfaccia utente. Infine il Controller funziona come intermediario tra Model e View. Riceve le richieste dell'utente, elabora la logica necessaria e aggiorna il Model o la View di conseguenza
 
-### L'applicazione è avviabile tramite docker-compose up sulla root di progetto. Inoltre è presente nella repository un file TestCollection per effettuare i test.
+## L'applicazione è avviabile tramite docker-compose up sulla root di progetto. Inoltre è presente nella repository un file TestCollection per effettuare i test.
 
