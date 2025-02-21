@@ -4,19 +4,19 @@ Il progetto è stato realizzato per gestire il gioco della dama inglese tra un u
 
 ## Specifiche richieste
 
-•	Creare una nuova partita contro intelligenza artificiale (IA) scegliendo il livello di difficoltà.
+*	Creare una nuova partita contro intelligenza artificiale (IA) scegliendo il livello di difficoltà.
     Un utente può partecipare al massimo ad una partita in corso.
 	In particolare, è necessario validare la richiesta di creazione della partita. Per ogni partita viene addebitato un numero di token in accordo con quanto segue:
     -	0.15 all’atto della creazione
     -	0.125 per ogni mossa fatta dal giocatore
 	La partita può essere creata se c’è credito sufficiente ad esaudire la richiesta. Tuttavia il costo della mossa non influisce sulla partita(La parita continua se il credito sotto forma di token risulta negativo).
-•	Creare la rotta per effettuare una mossa in una data partita verificando se questa è ammissibile o meno.
-•	Creare una rotta per valutare lo stato di una data partita; una partita si considera chiusa quando:
+*	Creare la rotta per effettuare una mossa in una data partita verificando se questa è ammissibile o meno.
+*	Creare una rotta per valutare lo stato di una data partita; una partita si considera chiusa quando:
     -	Un utente / AI vince
     -	L’utente abbandona.
     -	Per ogni partita vinta al giocatore si dà 1 punto; per ogni partita interrotta -0.5 punti;
-•	Creare una rotta per restituire lo storico delle mosse.
-•   Creare una rotta per permettere all'utente admin di ricaricare i token per un dato giocatore(fornisce e_mail)
+*	Creare una rotta per restituire lo storico delle mosse.
+*   Creare una rotta per permettere all'utente admin di ricaricare i token per un dato giocatore(fornisce e_mail)
 Tutte le richieste devono essere validate e autorizzate mediante tokenJwt.
 
 
