@@ -1,0 +1,333 @@
+{
+	"info": {
+		"_postman_id": "b8b62743-25a7-4354-95e7-21fd935866fa",
+		"name": "progettoTypescript",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39711407"
+	},
+	"item": [
+		{
+			"name": "creaPartita",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6M30.52x0vUEBeGPAJ4JxO80Erb8ICuA093iSSOe4oknD710",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"livello\":\"facile\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:{{PORT}}/creaPartita",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"creaPartita"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "visualizzaUtenti",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6Mn0.TRe-dhUnRCDZqlcsmoo5rIrX-PVXGIi7aZtBByA5l1Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:{{PORT}}/visualizzaUtenti",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"visualizzaUtenti"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "visualizzaPartite",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6MX0.rkXCN7CBW06EbuytNSBE9TKnCtpp4KLurrCfnVhTkSc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:{{PORT}}/visualizzaPartite",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"visualizzaPartite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mossa",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6M30.52x0vUEBeGPAJ4JxO80Erb8ICuA093iSSOe4oknD710",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"origin\":22,\r\n    \"destination\":18,\r\n    \"captures\":[],\r\n    \"id_match\":7\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:{{PORT}}/Mossa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"Mossa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Abbandona",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6Mn0.TRe-dhUnRCDZqlcsmoo5rIrX-PVXGIi7aZtBByA5l1Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_match\":4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:{{PORT}}/Abbandona",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"Abbandona"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "visualizzaStorico",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6M30.52x0vUEBeGPAJ4JxO80Erb8ICuA093iSSOe4oknD710",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:{{PORT}}/visualizzaStorico/7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"visualizzaStorico",
+						"7"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ricarica",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6NH0.UykxTacYWPimzX_x_K7Nxh7kUvhnGsW-aui26pN2t_U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n     \"e_mail\": \"\",\r\n     \"ricaricaToken\":10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:{{PORT}}/Ricarica",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"Ricarica"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VisualizzaStatoPartita",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6Mn0.TRe-dhUnRCDZqlcsmoo5rIrX-PVXGIi7aZtBByA5l1Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:{{PORT}}/VisualizzaStatoPartita/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"VisualizzaStatoPartita",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

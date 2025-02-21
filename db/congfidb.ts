@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
 import seedDatabase from './seeds';
 
+
 const sequelize = new Sequelize({
     database: process.env.DB_NAME || 'mydb',
     username: process.env.DB_USER || 'root',
@@ -11,20 +12,26 @@ const sequelize = new Sequelize({
   });
 
 
-  sequelize.authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-  })
-  .catch((error) => {
-    console.error('Unable to connect to the database:', error);
+const initializeDatabase = async () => {
+  try {
+      // Autenticazione della connessione al database
+      await sequelize.authenticate();
+      console.log('Connection has been established successfully.');
+
+      // Sincronizzazione del database, sincronizza i modelli con le tabelle.
+      await sequelize.sync({ alter: true });
+      await seedDatabase();
+      console.log('Database sincronizzato con successo!');
+  } catch (error) {
+      console.error('Errore durante la connessione o sincronizzazione del database:', error);
   }
+};
+
+// Esegui la funzione per inizializzare il database
+initializeDatabase();
 
 
 
-
-);
-
-seedDatabase();
 
 
 export default sequelize;

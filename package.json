@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "dev": "nodemon --legacy-watch --ext ts --exec ts-node index.ts"
+    "dev": "nodemon --legacy-watch --ext ts --exec ts-node index.ts",
+    "start": "ts-node index.ts"
   },
   "author": "costantinotigano",
   "license": "ISC",

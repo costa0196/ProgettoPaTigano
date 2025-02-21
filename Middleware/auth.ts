@@ -1,61 +1,55 @@
 import jwt from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
-import Errore from "../Error/error";
+import Errore from "../Utility/Error/error";
+import { PayloadJWTcreaPartita } from '../Utility/interface';
+import { Request,Response,NextFunction } from "express";
+import { Ruolo } from "../Utility/enum";
 
 dotenv.config();
 
-// Estendi Request in types.d.ts
-declare global {
-    namespace Express {
-        interface Request {
-            payload: any; // Puoi definire un tipo più preciso per `user`
-        }
-    }
-}
-
-
-
-const verifyToken = (req: Request, res: Response, next: NextFunction): void => 
+// Funzione middleware per verificare se nella richiesta è presente l'header di autorizzazione
+const checkToken = (req:Request , res: Response, next: NextFunction): void => 
     {
-        const tokenJwt = req.headers.authorization;
         try{
-            if (tokenJwt){
+            if (req.headers.authorization)
+            {
+                const tokenJwt:string = req.headers.authorization.split(' ')[1];
+                req.tokenjwt= tokenJwt;
                 next()
-            }
-            else{
-                const error:Errore = new Errore('Tokenjwt assente',401);
+            }else{
+                const error:Errore = new Errore('Tokenjwt assente',403);
                 next(error);
             }
         }catch {
-            next(new Errore('Problema interno',501)) 
+            next(new Errore('Problema di autorizzazione',403)) 
         }
     
     }
 
+// Funzione di middleware per la decodifica del TokenJwt
+const validateUtente = (req: Request, res: Response, next: NextFunction): void => 
+    { 
+        const tokenjwt:string= req.tokenjwt
+        try{
+            const decoded =jwt.verify(tokenjwt,process.env.SECRET_KEY as string) as PayloadJWTcreaPartita;
+            if(decoded.ruolo===Ruolo.Admin || decoded.ruolo===Ruolo.Player){
+                req.ruolo=decoded.ruolo
+                req.id_giocatore=decoded.id_giocatore;
+                next()
+            }else{
+                const error:Errore = new Errore('Ruolo utente non valido',403);
+                next(error);  
+            }
+            
+        }catch{
+            next(new Errore('TokenJwt non valido',403))
+        }
 
-// const verifyUtente = (req: Request, res: Response, next: NextFunction): void => 
-//     {
-//         const tokenJwt = req.headers.authorization?.split(' ')[1];
-//         try{
-//             if (tokenJwt){
-//                 const decoded = jwt.verify(tokenJwt, process.env.SECRET_KEY as string);
-                
-//                 }
-//                 next()
-//             }
-//             else{
-//                 const error:Errore = new Errore('booooo',401);
-//                 next(error);
-//             }
-//         }catch {
-//             next(new Errore('Problema interno',501)) 
-//         }
+    }
+
+
+
     
-//     }
 
-
-    
-
-const auth = {verifyToken};
+const auth = {checkToken,validateUtente};
 export default auth;
