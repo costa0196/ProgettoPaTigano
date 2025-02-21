@@ -47,7 +47,7 @@ Ecco un esempio di payload per l'autentificazione valido per tutte le rotte:
 {
   "ruolo": "player",
   "id_giocatore": 3
-}
+}```
 L'algoritmo scelto per l'header è : HS256
 
 ### • /CreaAsta
