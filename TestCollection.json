@@ -17,7 +17,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6M30.52x0vUEBeGPAJ4JxO80Erb8ICuA093iSSOe4oknD710",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6Mn0.TRe-dhUnRCDZqlcsmoo5rIrX-PVXGIi7aZtBByA5l1Y",
 							"type": "string"
 						}
 					]
@@ -94,7 +94,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6MX0.rkXCN7CBW06EbuytNSBE9TKnCtpp4KLurrCfnVhTkSc",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6Mn0.TRe-dhUnRCDZqlcsmoo5rIrX-PVXGIi7aZtBByA5l1Y",
 							"type": "string"
 						}
 					]
@@ -132,7 +132,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6M30.52x0vUEBeGPAJ4JxO80Erb8ICuA093iSSOe4oknD710",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6Mn0.TRe-dhUnRCDZqlcsmoo5rIrX-PVXGIi7aZtBByA5l1Y",
 							"type": "string"
 						}
 					]
@@ -141,7 +141,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"origin\":22,\r\n    \"destination\":18,\r\n    \"captures\":[],\r\n    \"id_match\":7\r\n}",
+					"raw": "{\r\n    \"origin\":20,\r\n    \"destination\":16,\r\n    \"captures\":[],\r\n    \"id_match\":2\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -211,7 +211,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6M30.52x0vUEBeGPAJ4JxO80Erb8ICuA093iSSOe4oknD710",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6Mn0.TRe-dhUnRCDZqlcsmoo5rIrX-PVXGIi7aZtBByA5l1Y",
 							"type": "string"
 						}
 					]
@@ -257,7 +257,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6InBsYXllciIsImlkX2dpb2NhdG9yZSI6NH0.UykxTacYWPimzX_x_K7Nxh7kUvhnGsW-aui26pN2t_U",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydW9sbyI6ImFkbWluIiwiaWRfZ2lvY2F0b3JlIjo0fQ.65oKym6MjljYL_x3fRcQ-P_gi4yqSs0PTIB8_kyQZUk",
 							"type": "string"
 						}
 					]
@@ -266,7 +266,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n     \"e_mail\": \"\",\r\n     \"ricaricaToken\":10\r\n}",
+					"raw": "{\r\n     \"e_mail\": \"dama@gmail.com\",\r\n     \"ricaricaToken\" : 10\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
