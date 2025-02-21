@@ -47,7 +47,8 @@ Ecco un esempio di payload per l'autentificazione valido per tutte le rotte:
 {
   "ruolo": "player",
   "id_giocatore": 3
-}```
+}
+```
 L'algoritmo scelto per l'header è : HS256
 
 ### • /CreaAsta
@@ -86,11 +87,11 @@ Inoltre sono state create altre due ulteriori rotte:visualizzaPartite e visualiz
 # Progettazione
 ## UseCaseDiagram
 
-![DiagrammaUseCase]('./Utility/Diagrammi/UseCaseDiagram.png')
+![DiagrammaUseCase](./Utility/Diagrammi/UseCaseDiagram.png)
 
 
 ## SequeceDiagaram
-![Diagramma delle sequenze]('./Utility/Diagrammi/sequenze1.png')
+![Diagramma delle sequenze](./Utility/Diagrammi/sequenze1.png)
 
 Il diagramma delle sequenze risulta essere circa uguale per tutte le rotte. Dunque è stata riportata quella relativa alla creazione della partita come modello per le altre.
 
