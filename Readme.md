@@ -91,7 +91,7 @@ Inoltre sono state create altre due ulteriori rotte:visualizzaPartite e visualiz
 
 
 ## SequeceDiagaram
-![Diagramma delle sequenze](./Utility/Diagrammi/sequenze1.png)
+![Diagramma delle sequenze](./Utility/Diagrammi/DiagrammaSequenze.png)
 
 Il diagramma delle sequenze risulta essere circa uguale per tutte le rotte. Dunque è stata riportata quella relativa alla creazione della partita come modello per le altre.
 
