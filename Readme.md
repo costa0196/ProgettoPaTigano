@@ -101,5 +101,5 @@ Il diagramma delle sequenze risulta essere circa uguale per tutte le rotte. Dunq
 
 **MVC:**Pattern utilizzato per dividere la logica di gestione dei dati. Si basa su tre componenti principali: Model,View,Controller. Il model si occupa di definire modelli che sono mappati con i dati del database e permette le operazioni inerenti ai dati. La view invece si occupa dalla presentazione dei dati a livello di interfaccia utente. Infine il Controller funziona come intermediario tra Model e View. Riceve le richieste dell'utente, elabora la logica necessaria e aggiorna il Model o la View di conseguenza
 
-## L'applicazione è avviabile tramite docker-compose up sulla root di progetto. Inoltre è presente nella repository un file TestCollection per effettuare i test.
+## L'applicazione è avviabile tramite docker-compose up --build sulla root di progetto. Inoltre è presente nella repository un file TestCollection per effettuare i test.
 

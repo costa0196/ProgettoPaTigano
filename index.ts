@@ -26,49 +26,48 @@ app.use([auth.checkToken,auth.validateUtente])
 
 
 
-app.post('/creaPartita',validate.validate_tokenResiduo,validate.validate_partite_in_corso,validate.validate_livello,(req:Request,res:Response)=>{
-  controllerMatch.creaPartita(req)
-  .then((esito) => res.json(esito))
-  .catch((esito)=>res.json(esito));
- 
+app.post('/creaPartita',validate.validate_tokenResiduo,validate.validate_partite_in_corso,validate.validate_livello,async (req:Request,res:Response)=>{
+  const esito = await controllerMatch.creaPartita(req);
+  res.statusCode=esito.statusCode
+  res.json(esito)
 });
 
 
 const val = [validate.validateRecuperaPartita,validate.validateOrigin,validate.validateDestination,validate.validateCaptures,validate.validateMossa]
-app.post('/Mossa',val,(req:Request,res:Response)=>{
-  controllerMossa.avanzamentoGioco(req)
-  .then((esito) =>res.json(esito))
-  .catch((esito)=>res.json(esito));
+app.post('/Mossa',val,async (req:Request,res:Response)=>{
+  const esito = await controllerMossa.avanzamentoGioco(req)
+  res.statusCode=esito.statusCode
+  res.json(esito)
 });
 
 
 
-app.post('/Abbandona',validate.validate_tokenResiduo,(req:Request,res:Response)=>{
-  controllerMatch.abbandona(req)
-  .then((esito) =>res.json(esito))
-  .catch((esito)=>res.json(esito));
+app.post('/Abbandona',validate.validate_tokenResiduo,async (req:Request,res:Response)=>{
+  const esito = await controllerMatch.abbandona(req)
+  res.statusCode=esito.statusCode
+  res.json(esito)
 })
 
 
-app.post('/Ricarica',validate.validateAdmin,validate.validate_mailUtente,validate.validate_tokenRicarica,(req:Request,res:Response)=>{
-  controllerUtente.ricarica(req)
-  .then((esito) =>res.json(esito))
-  .catch((esito)=>res.json(esito));
+app.post('/Ricarica',validate.validateAdmin,validate.validate_mailUtente,validate.validate_tokenRicarica,async (req:Request,res:Response)=>{
+  const esito = await controllerUtente.ricarica(req)
+  res.statusCode=esito.statusCode
+  res.json(esito)
 })
 
 
-app.get('/visualizzaStorico/:id_match',validate.validate_tokenResiduo,(req:Request, res:Response)=>{
+app.get('/visualizzaStorico/:id_match',validate.validate_tokenResiduo, async (req:Request, res:Response)=>{
 
-  controllerMatch.visualizza_storico(req)
-  .then((esito) =>res.json(esito))
-  .catch((esito)=>res.json(esito));
+  const esito = await controllerMatch.visualizza_storico(req)
+  res.statusCode=esito.statusCode
+  res.json(esito)
 })
 
 
-app.get('/VisualizzaStatoPartita/:id_match',validate.validate_tokenResiduo,(req:Request, res:Response)=>{
-  controllerUtente.statoPartita(req)
-  .then((esito) =>res.json(esito))
-  .catch((esito)=>res.json(esito));
+app.get('/VisualizzaStatoPartita/:id_match',validate.validate_tokenResiduo,async (req:Request, res:Response)=>{
+  const esito = await controllerUtente.statoPartita(req)
+  res.statusCode=esito.statusCode
+  res.json(esito);
 })
 
 

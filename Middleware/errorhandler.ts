@@ -7,6 +7,7 @@ const errorHandler = (err: any, req: Request, res: Response, next: NextFunction)
     if(err instanceof Errore){
         const msg:Msg= new Msg('Errore',err.statusCode,err.message);
         console.log(err.stack)
+        res.statusCode=msg.statusCode
         res.json(msg)
     }else{
         const statusCode = 501;

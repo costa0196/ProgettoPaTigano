@@ -4,4 +4,4 @@ COPY . .
 RUN npm install
 RUN npm install -g typescript
 RUN npm install -g nodemon
-CMD ["npm", "run","start"] 
+CMD ["npm", "run","dev"] 
