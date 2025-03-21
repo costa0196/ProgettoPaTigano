@@ -48,7 +48,7 @@ const avanzamentoGioco = async (req:Request) => {
                 console.log(game.status);
                 const stato_partita = convertPartita(game.engine.data,game.history.moves,game.history.boards)
                 await Partita.update({ stato_partita:stato_partita,stato:'Perso'},{ where:{ id_match: body.id_match } })   
-          }else{
+            }else{
               //  Caso in cui nessuno dei due ha vinto, si continua con l'avanzamento del gioco, con un'altra mossa del player
                 const stato_partita = convertPartita(game.engine.data,game.history.moves,game.history.boards)
                 await Partita.update({ stato_partita:stato_partita},{ where:{ id_match: body.id_match } });

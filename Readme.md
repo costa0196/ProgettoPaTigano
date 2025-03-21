@@ -51,7 +51,7 @@ Ecco un esempio di payload per l'autentificazione valido per tutte le rotte:
 ```
 L'algoritmo scelto per l'header è : HS256
 
-### • /CreaAsta
+### • /CreaPartita
 Permette di creare una nuova asta, una volta autorizzata, fornendo come body della richiesta il livello(facile,medio,difficile).
 Per essere validata essa deve:
 - Verificare che i token residui dell'utente siano maggiori di 0.15.
