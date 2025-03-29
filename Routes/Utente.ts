@@ -8,10 +8,10 @@ import routerPartite from './Partita';
 
 const router = express.Router()
 router.use('/Partita',routerPartite)
-const middlewareRicarica = [auth.checkToken,auth.validateUtente,validate.validateAdmin,validate.validate_mailUtente,validate.validate_tokenRicarica]
+const middlewareRicarica = [auth.checkToken,auth.validateUtente,validate.validate_body_Ricarica,validate.validateAdmin,validate.validate_mailUtente,validate.validate_tokenRicarica]
 const middlewareVisualizzaStorico = [auth.checkToken,auth.validateUtente,validate.validate_tokenResiduo]
 const middlewareVisualizzaStatoPartita = [auth.checkToken,auth.validateUtente,validate.validate_tokenResiduo]
-const middlwarePartitaData = [validate.validate_tokenResiduo,validate.checkbody,validate.typeDate,validate.validDate,validate.checkInizioFine,validate.checkdataFutura]
+const middlwarePartitaData = [auth.checkToken,auth.validateUtente,validate.validate_tokenResiduo,validate.validate_body_RicercaPartite,validate.checkbodyDate,validate.typeDate,validate.validDate,validate.checkInizioFine,validate.checkdataFutura]
 
 
 
@@ -52,15 +52,19 @@ router.get('/visualizzaClassifica/',async (req:Request, res:Response) => {
 
 
 
-router.get('/visualizzaUtenti/',(req:Request, res:Response) => {
-  controllerUtente.visualizza_utenti(res);
+router.get('/visualizzaUtenti/',async(req:Request, res:Response) => {
+  const esito = await controllerUtente.visualizza_utenti(res);
+  res.statusCode=esito.statusCode
+  res.json(esito);
   //res.send('Visualizza sul terminale gli utenti')
 })
 
 
 
-router.get('/visualizzaPartite/',(req:Request, res:Response) => {
-  controllerMatch.visualizza_partite(res);
+router.get('/visualizzaPartite/',async(req:Request, res:Response) => {
+  const esito = await controllerMatch.visualizza_partite(res);
+  res.statusCode=esito.statusCode
+  res.json(esito);
 })
 
 export default router

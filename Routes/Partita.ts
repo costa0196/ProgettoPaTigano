@@ -7,8 +7,8 @@ import { Request,Response } from "express";
 
 
 const router = express.Router()
-const middlwareCreaPartita= [validate.validate_tokenResiduo,validate.validate_partite_in_corso,validate.validate_livello];
-const middlewareMossa= [validate.validateRecuperaPartita,validate.validateOrigin,validate.validateDestination,validate.validateCaptures,validate.validateMossa]
+const middlwareCreaPartita= [validate.validate_tokenResiduo,validate.validate_partite_in_corso,validate.validate_body_CreaPartita,validate.validate_livello];
+const middlewareMossa= [validate.validateRecuperaPartita,validate.validate_body_Mossa,validate.validateOrigin,validate.validateDestination,validate.validateCaptures,validate.validateMossa]
 router.use([auth.checkToken,auth.validateUtente])
 
 

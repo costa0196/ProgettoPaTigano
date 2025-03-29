@@ -26,9 +26,6 @@ const creaPartita = async(req:Request):Promise<Msg>=>{
         const data = {engine,history};
         const dati = JSON.stringify(data)
 
-        // Mostra sul terminale la tabella della partita con le pedine e le mosse valida che l'utente può effettuare
-        console.table(game.asciiBoard());
-        console.log(game.moves);
         // Scrive sul db la nuova partita con lo stato della partita dopo la prima mossa dell'Ia
         await Partita.create({ stato: 'In corso', livello: req.body.livello,totmosse_tPlayer:0,win:null,interr:null,esito:null,id_giocatore:req.id_giocatore,stato_partita:dati});
         const init:number=0.15;
@@ -87,13 +84,21 @@ export const getMoveForAI = async (game: any, level: string): Promise<MossaI> =>
   };  
 
 
-const visualizza_partite = async (res:Response):Promise<void> => {
+const visualizza_partite = async (res:Response):Promise<Msg> => {
     try {
         const partite = await Partita.findAll({raw:true});  // SELECT * FROM Users
-        const response={init:"Operazione effettuata",statusCode:200,message:JSON.parse(JSON.stringify(partite))};
-        res.json(response)
-    } catch (error) {
-        console.error('Errore durante la query:', error);
+        const partita_list:string= JSON.stringify(partite);
+        const msg:Msg= new Msg('Operazione effettuata',200,partita_list);
+          return msg
+    }catch(error){
+        if(error instanceof Errore){
+            console.log(error.stack);
+            console.log(error.message)
+            const msg:Msg= new Msg('Errore',error.statusCode,error.message); 
+            return msg 
+            }else{
+            return new Msg('Errore', 500, 'errore sconosciuto');
+            }
     }
 }
 

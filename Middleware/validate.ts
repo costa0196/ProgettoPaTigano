@@ -6,6 +6,7 @@ import { Request,Response,NextFunction } from "express";
 import {Livello,Ruolo,Stato} from '../Utility/enum';
 import { MossaI } from '../Utility/interface';
 
+
 // Valida per tutte le rotte eccetto la rotta Mossa
 // Middleware di verifica del token residuo, si applica su tutte le richieste eccetto per quella delle mosse della partita    
 const validate_tokenResiduo =  async (req:Request,res:Response,next:NextFunction):Promise<void>=>{
@@ -70,16 +71,30 @@ const validate_partite_in_corso =  async (req:Request,res:Response,next:NextFunc
     }
 }
 
+
+const validate_body_CreaPartita = (req:Request,res:Response,next:NextFunction)=>{
+    try{
+        if(req.body && Object.keys(req.body).length===1 && Object.keys(req.body)[0]==='livello'){
+            next()
+        } 
+        else{
+            const error:Errore = new Errore('Body della richiesta non corretto',404);
+            next(error);
+        }
+    }catch{
+        next(new Errore('Errore nella verifica del body della richiesta',404))
+    }
+}
+
 // Valida per CreaPartita
 // Funzione di middleware per verificare il livello della partita
 const validate_livello=(req:Request,res:Response,next:NextFunction)=>{
     try{
-        const {livello}:any = req.body;
-        if (!livello || !Object.values(Livello).includes(livello)) {
+        if(Object.values(Livello).includes(req.body.livello)) {
+            next()
+        }else{
             const error:Errore = new Errore('Livello non consentito',404);
             next(error);
-        }else{
-            next()
         }
     }catch{
         next(new Errore('Errore nel body della richiesta',404))
@@ -87,7 +102,35 @@ const validate_livello=(req:Request,res:Response,next:NextFunction)=>{
 
 }
 
+const validate_body_RicercaPartite = (req:Request,res:Response,next:NextFunction)=>{
+    try{
+        if(req.body && Object.keys(req.body).length===2 && Object.keys(req.body)[0]==='dataInizio' && Object.keys(req.body)[1]==='dataFine'){
+            next()
+        } 
+        else{
+            const error:Errore = new Errore('Body della richiesta non corretto',404);
+            next(error);
+        }
+    }catch{
+        next(new Errore('Errore nella verifica del body della richiesta',404))
+    }
+}
 
+
+
+const validate_body_Ricarica = (req:Request,res:Response,next:NextFunction)=>{
+    try{
+        if(req.body && Object.keys(req.body).length===2 && Object.keys(req.body)[0]==='e_mail'&& Object.keys(req.body)[1]==='ricaricaToken'){
+            next()
+        } 
+        else{
+            const error:Errore = new Errore('Body della richiesta non corretto',404);
+            next(error);
+        }
+    }catch{
+        next(new Errore('Errore nella verifica del body della richiesta',404))
+    }
+}
 
 
 // Valida per Mossa
@@ -114,6 +157,20 @@ const validateRecuperaPartita= async(req:Request,res:Response,next:NextFunction)
         next(error)
     }
 
+}
+
+const validate_body_Mossa = (req:Request,res:Response,next:NextFunction)=>{
+    try{
+        if(req.body && Object.keys(req.body).length===3 && Object.keys(req.body)[0]==='origin' && Object.keys(req.body)[1]==='destination' && Object.keys(req.body)[2]==='captures'){
+            next()
+        } 
+        else{
+            const error:Errore = new Errore('Body della richiesta non corretto',404);
+            next(error);
+        }
+    }catch{
+        next(new Errore('Errore nella verifica del body della richiesta',404))
+    }
 }
 
 
@@ -283,7 +340,7 @@ const validate_tokenRicarica= async(req:Request,res:Response,next:NextFunction)=
 }
 
 
-const checkbody = (req:Request,res:Response,next:NextFunction)=>{
+const checkbodyDate = (req:Request,res:Response,next:NextFunction)=>{
     try{
         if(req.body.dataInizio && req.body.dataFine){
             next()
@@ -373,5 +430,5 @@ const checkdataFutura =(req:Request,res:Response,next:NextFunction)=>{
 
 
 
-const validate = {validate_partite_in_corso,validate_tokenResiduo,validateRecuperaPartita,validateMossa,validate_livello,validateOrigin,validateDestination,validateCaptures,validate_mailUtente,validate_tokenRicarica,validateAdmin,checkbody,typeDate,validDate,checkInizioFine,checkdataFutura}
+const validate = {validate_partite_in_corso,validate_tokenResiduo,validateRecuperaPartita,validateMossa,validate_livello,validateOrigin,validateDestination,validateCaptures,validate_mailUtente,validate_tokenRicarica,validateAdmin,checkbodyDate,typeDate,validDate,checkInizioFine,checkdataFutura,validate_body_CreaPartita,validate_body_Mossa,validate_body_Ricarica,validate_body_RicercaPartite}
 export default validate

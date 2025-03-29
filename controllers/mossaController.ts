@@ -34,12 +34,14 @@ const avanzamentoGioco = async (req:Request) => {
 
             // Controlla il caso in cui l'utente vince
         if(game.engine.data.board.dark==0){
-            console.log(game.status);
-            console.log('Hai vinto');
+            //console.log(game.status);
+            //console.log('Hai vinto');
             // Se ha vinto, allora si salva la partita
             const stato_partita = convertPartita(game.engine.data,game.history.moves,game.history.boards)
-            await Partita.update({ stato_partita:stato_partita,stato:'Vinto'},{ where: { id_match: req.params.id_match } })      
+            await Partita.update({ stato_partita:stato_partita,stato:'Win'},{ where: { id_match: req.params.id_match } })      
             await Utente.increment('punteggio', {by: 1, where: {id_giocatore: req.id_giocatore}});
+            const msg:Msg= new Msg('Operazione effettuata',200,'Hai vinto!');
+            return msg
         }else{
             const mossa_ia = await getMoveForAI(game,livello);
             game.move(mossa_ia);
@@ -47,7 +49,9 @@ const avanzamentoGioco = async (req:Request) => {
             if(game.engine.data.board.light==0){
                 console.log(game.status);
                 const stato_partita = convertPartita(game.engine.data,game.history.moves,game.history.boards)
-                await Partita.update({ stato_partita:stato_partita,stato:'Perso'},{ where:{ id_match: req.params.id_match } })   
+                await Partita.update({ stato_partita:stato_partita,stato:'Lose'},{ where:{ id_match: req.params.id_match } }) 
+                const msg:Msg= new Msg('Operazione effettuata',200,'Hai perso!');
+                return msg  
             }else{
               //  Caso in cui nessuno dei due ha vinto, si continua con l'avanzamento del gioco, con un'altra mossa del player
                 const stato_partita = convertPartita(game.engine.data,game.history.moves,game.history.boards)
