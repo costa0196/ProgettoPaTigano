@@ -11,7 +11,7 @@ import {getMoveForAI} from './matchController';
 const avanzamentoGioco = async (req:Request) => {
   try{
     const mossa = req.mossa;
-    const body=req.body;
+    // body=req.body;
     const stato_partita=req.stato_partita;
     const livello=req.livello
     if(mossa!== undefined && stato_partita!== undefined &&  typeof livello==='string'){
@@ -38,7 +38,7 @@ const avanzamentoGioco = async (req:Request) => {
             console.log('Hai vinto');
             // Se ha vinto, allora si salva la partita
             const stato_partita = convertPartita(game.engine.data,game.history.moves,game.history.boards)
-            await Partita.update({ stato_partita:stato_partita,stato:'Vinto'},{ where: { id_match: body.id_match } })      
+            await Partita.update({ stato_partita:stato_partita,stato:'Vinto'},{ where: { id_match: req.params.id_match } })      
             await Utente.increment('punteggio', {by: 1, where: {id_giocatore: req.id_giocatore}});
         }else{
             const mossa_ia = await getMoveForAI(game,livello);
@@ -47,16 +47,24 @@ const avanzamentoGioco = async (req:Request) => {
             if(game.engine.data.board.light==0){
                 console.log(game.status);
                 const stato_partita = convertPartita(game.engine.data,game.history.moves,game.history.boards)
-                await Partita.update({ stato_partita:stato_partita,stato:'Perso'},{ where:{ id_match: body.id_match } })   
+                await Partita.update({ stato_partita:stato_partita,stato:'Perso'},{ where:{ id_match: req.params.id_match } })   
             }else{
               //  Caso in cui nessuno dei due ha vinto, si continua con l'avanzamento del gioco, con un'altra mossa del player
                 const stato_partita = convertPartita(game.engine.data,game.history.moves,game.history.boards)
-                await Partita.update({ stato_partita:stato_partita},{ where:{ id_match: body.id_match } });
-                console.table(game.asciiBoard());
-                console.log(game.moves)
+                await Partita.update({ stato_partita:stato_partita},{ where:{ id_match: req.params.id_match } });
+                //console.table(game.asciiBoard());
+                //console.log(game.moves)
           }
         }    
-      const msg:Msg= new Msg('Operazione effettuata',201,'Mossa effettuata con successo. L Asciboard e le mosse valide sono disponibili sul terminale');
+
+      const stringArray:string[] = game.moves.map(obj => JSON.stringify(obj));
+
+
+      const asciboard = game.asciiBoard();
+      const l = asciboard.split("\n");
+      const lines=l.concat(stringArray)
+
+      const msg:Msg= new Msg('Operazione effettuata',200,lines);
       return msg
     }else{
         const err:Errore = new Errore('Errore nella mossa',403);

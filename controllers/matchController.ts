@@ -25,6 +25,7 @@ const creaPartita = async(req:Request):Promise<Msg>=>{
         const history ={moves,boards};
         const data = {engine,history};
         const dati = JSON.stringify(data)
+
         // Mostra sul terminale la tabella della partita con le pedine e le mosse valida che l'utente può effettuare
         console.table(game.asciiBoard());
         console.log(game.moves);
@@ -37,8 +38,16 @@ const creaPartita = async(req:Request):Promise<Msg>=>{
       else{
         const err:Errore = new Errore('Errore nella selezione del livello,body invalido',403)
         throw err;
-      }     
-      const msg:Msg= new Msg('Operazione effettuata',201,'Partita creata con successo. L asciboard e le mosse disponibili sono visibili sul terminale');
+      }    
+
+      const stringArray:string[] = game.moves.map(obj => JSON.stringify(obj));
+
+
+      const asciboard = game.asciiBoard();
+      const l = asciboard.split("\n");
+      const lines=l.concat(stringArray)
+
+      const msg:Msg= new Msg('Operazione effettuata',200,lines);
       return msg
     }catch(err:unknown){
       if(err instanceof Errore){
@@ -81,7 +90,7 @@ export const getMoveForAI = async (game: any, level: string): Promise<MossaI> =>
 const visualizza_partite = async (res:Response):Promise<void> => {
     try {
         const partite = await Partita.findAll({raw:true});  // SELECT * FROM Users
-        const response={init:"Operazione effettuata",statusCode:201,message:JSON.parse(JSON.stringify(partite))};
+        const response={init:"Operazione effettuata",statusCode:200,message:JSON.parse(JSON.stringify(partite))};
         res.json(response)
     } catch (error) {
         console.error('Errore durante la query:', error);
@@ -91,12 +100,12 @@ const visualizza_partite = async (res:Response):Promise<void> => {
 
 const abbandona = async(req:any)=>{
   try{
-    const partita=await Partita.findOne({where:{id_match:req.body.id_match,stato:'In corso',id_giocatore:req.id_giocatore}});
+    const partita=await Partita.findOne({where:{id_match:req.params.id_match,stato:'In corso',id_giocatore:req.id_giocatore}});
     if(partita!==null){
       // Se trova una partita in corso che corrisponda al match e al giocatore allora cambia lo stato in interrotta e aggiungi la penalità all'utente
-      await partita.update({stato: 'Interrotta'},{where:{id_match:req.id_match}});
+      await partita.update({stato: 'Interrotta'},{where:{id_match:req.params.id_match}});
       await Utente.decrement('punteggio', {by: 0.5, where: {id_giocatore: req.id_giocatore}});
-      const msg:Msg= new Msg('Operazione effettuata',201,'Partita interrotta con successo');
+      const msg:Msg= new Msg('Operazione effettuata',200,'Partita interrotta con successo');
       return msg
     }
     else{
@@ -130,7 +139,9 @@ const visualizza_storico= async (req:Request)=>{
       const data = JSON.parse(partita.stato_partita);
       const dati = JSON.stringify(data.history.moves);
       let storico:string = dati.replace(/\\"/g, '"');
-      const msg:Msg= new Msg('Operazione effettuata',201,storico);
+      storico = storico.replace(/,"/g, ' ');
+      let storicoArr:string[] = storico.split(",");
+      const msg:Msg= new Msg('Operazione effettuata',201,storicoArr);
       return msg
     }else{
       const error:Errore = new Errore('Partita non trovata',404);

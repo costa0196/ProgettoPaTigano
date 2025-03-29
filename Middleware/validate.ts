@@ -94,10 +94,9 @@ const validate_livello=(req:Request,res:Response,next:NextFunction)=>{
 //Funzione di Middleware per il recupero nel db della partita, veifica che l'id del match della richiesta sia associato alla partita
 const validateRecuperaPartita= async(req:Request,res:Response,next:NextFunction)=>{
     try{
-        const body=req.body;
         const partita =await Partita.findOne({
             attributes: ['stato_partita','livello','id_giocatore','stato'],
-            where:{id_match:body.id_match},
+            where:{id_match:req.params.id_match},
             raw: true 
         })
         
@@ -116,7 +115,6 @@ const validateRecuperaPartita= async(req:Request,res:Response,next:NextFunction)
     }
 
 }
-
 
 
 // Funzione di middleware per convalidare l'origine della mossa. Altrimenti rimane possibile iniziare la mossa da una valore al di fuori dal range
@@ -285,8 +283,95 @@ const validate_tokenRicarica= async(req:Request,res:Response,next:NextFunction)=
 }
 
 
+const checkbody = (req:Request,res:Response,next:NextFunction)=>{
+    try{
+        if(req.body.dataInizio && req.body.dataFine){
+            next()
+        }else{
+            let error:Errore = new Errore('Data inizio o fine non specificato',400);
+            next(error)
+        }
+    }catch{
+        let error:Errore = new Errore('Bad request',404);
+        next(error)
+    }
+}
 
 
 
-const validate = {validate_partite_in_corso,validate_tokenResiduo,validateRecuperaPartita,validateMossa,validate_livello,validateOrigin,validateDestination,validateCaptures,validate_mailUtente,validate_tokenRicarica,validateAdmin}
+const typeDate =(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        if(typeof req.body.dataInizio === "string" && typeof req.body.dataFine === "string"){
+            next()
+        }else{
+            let error:Errore = new Errore('Le date non sono caratteri',400);
+            next(error)
+        }
+    }catch{
+        let error:Errore = new Errore('Bad request',404);
+        next(error)
+    }
+
+}
+
+
+const validDate =(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        const inizioGiorno = new Date(`${req.body.dataInizio}T00:00:00.000Z`);
+        const fineGiorno = new Date(`${req.body.dataFine}T23:59:59.999Z`);
+        if(isNaN(inizioGiorno.getTime()) || isNaN(fineGiorno.getTime())){
+            let error:Errore = new Errore('Le date non sono corrette',400);
+            next(error)
+        }
+        else{
+            next()
+        }
+    }catch{
+        let error:Errore = new Errore('Data non valida',404);
+        next(error)
+    }
+
+}
+
+
+const checkInizioFine =(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        const inizioGiorno = new Date(`${req.body.dataInizio}T00:00:00.000Z`);
+        const fineGiorno = new Date(`${req.body.dataFine}T23:59:59.999Z`);
+        if(inizioGiorno.getTime() > fineGiorno.getTime()) {
+            let error:Errore = new Errore('La data di inizio maggiore rispetto alla data di fine',400);
+            next(error)
+        }
+        else{
+            next()
+        }
+    }catch{
+        let error:Errore = new Errore('Data non valida',404);
+        next(error)
+    }
+
+}
+
+
+const checkdataFutura =(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        const inizioGiorno = new Date(`${req.body.dataInizio}T00:00:00.000Z`);
+        const oggi = new Date()
+        if(inizioGiorno.getTime() > oggi.getTime()) {
+            let error:Errore = new Errore('La data di inizio maggiore di quella odierna',400);
+            next(error)
+        }
+        else{
+            next()
+        }
+    }catch{
+        let error:Errore = new Errore('Data non valida',404);
+        next(error)
+    }
+
+}
+
+
+
+const validate = {validate_partite_in_corso,validate_tokenResiduo,validateRecuperaPartita,validateMossa,validate_livello,validateOrigin,validateDestination,validateCaptures,validate_mailUtente,validate_tokenRicarica,validateAdmin,checkbody,typeDate,validDate,checkInizioFine,checkdataFutura}
 export default validate

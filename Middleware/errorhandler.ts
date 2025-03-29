@@ -10,7 +10,7 @@ const errorHandler = (err: any, req: Request, res: Response, next: NextFunction)
         res.statusCode=msg.statusCode
         res.json(msg)
     }else{
-        const statusCode = 501;
+        const statusCode = 500;
         const msg:Msg=new Msg('Errore',statusCode,'Errore interno al serves');
         res.json(msg)
     }

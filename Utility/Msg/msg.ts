@@ -1,13 +1,13 @@
 interface IMsg {
     init: string;
     statusCode: number;
-    message: string;
+    message: string | string[];
 }
 
 export default class Msg implements IMsg {
     constructor(
         public readonly init: string,
         public readonly statusCode: number,
-        public readonly message: string
+        public readonly message: string | string[]
     ) {}
 }

@@ -5,23 +5,64 @@ import Errore from '../Utility/Error/error';
 import {Stato} from '../Utility/enum'
 import Partita from '../db/models/match';
 import {  EnglishDraughts as Draughts,  EnglishDraughtsComputerFactory as ComputerFactory,} from 'rapid-draughts/english';
+import { Op, literal,fn } from "sequelize";
+import { match } from 'assert';
+import { where } from 'sequelize';
 
 
 const visualizza_utenti = async (res:Response) => {
     try {
         const users = await utente.findAll({raw:true});  // SELECT * FROM Users
-        const response={init:"Operazione effettuata",statusCode:201,message:JSON.parse(JSON.stringify(users))};
+        const response={init:"Operazione effettuata",statusCode:200,message:JSON.parse(JSON.stringify(users))};
         res.json(response)
-        console.log(users);  // Mostra tutti gli utenti
     } catch (error) {
         console.error('Errore durante la query:', error);
     }
 }
 
+
+
+const visualizzaPartitaUtente = async (req:Request,res:Response) => {
+    try{
+        //console.log(typeof req.body.dataInizio);
+        const inizioGiorno = new Date(`${req.body.dataInizio}T00:00:00.000Z`);
+        const fineGiorno = new Date(`${req.body.dataFine}T23:59:59.999Z`);
+        console.log(inizioGiorno)
+        const partite = await Partita.findAll({
+            attributes: ['id_match','stato','livello'],
+            raw: true,
+            where: {
+              createdAt: {
+                [Op.between]: [inizioGiorno, fineGiorno] // Cerca tra inizio e fine della giornata
+              },
+              id_giocatore: req.id_giocatore 
+            }
+          });
+          const partita:string= JSON.stringify(partite);
+
+          const msg:Msg= new Msg('Operazione effettuata',200,partita);
+          return msg
+          //const response={init:"Operazione effettuata",statusCode:200,message:JSON.parse(JSON.stringify(partite))};
+          //res.json(response)
+    }catch(error){
+        if(error instanceof Errore){
+            console.log(error.stack);
+            console.log(error.message)
+            const msg:Msg= new Msg('Errore',error.statusCode,error.message);
+            console.log(msg)   
+            return msg 
+            }else{
+            return new Msg('Errore', 500, 'errore sconosciuto');
+            }
+    }
+
+}
+
+
 const ricarica = async(req:Request)=>{
     try{
         await utente.increment('q_token', {by:req.body.ricaricaToken, where: {e_mail: req.body.e_mail}});
-        const msg:Msg= new Msg('Operazione effettuata',201,'Ricarica avvenuta con successo');
+        const msg:Msg= new Msg('Operazione effettuata',200,'Ricarica avvenuta con successo');
         return msg
     }catch(error:unknown){
         if(error instanceof Errore){
@@ -43,7 +84,7 @@ const statoPartita= async(req:Request)=>{
             const partita = await Partita.findOne({attributes:['stato','stato_partita'],where:{id_giocatore:req.id_giocatore,id_match:req.params.id_match}});
             if(partita){
                 if(partita.stato===Stato.Interrotta || partita.stato ===Stato.Lose || partita.stato===Stato.Win){
-                    const msg:Msg= new Msg('Operazione effettuata',201,`Stato partita recuperato con successo:  ${partita.stato}`);
+                    const msg:Msg= new Msg('Operazione effettuata',200,`Stato partita recuperato con successo:  ${partita.stato}`);
                     return msg
                 }else if(partita.stato===Stato.InCorso){
                     if(partita.stato_partita){
@@ -52,7 +93,7 @@ const statoPartita= async(req:Request)=>{
                         console.log('La partita e in corso, ecco le mosse valide');
                         console.log(game.moves);
                         console.table(game.asciiBoard());
-                        const msg:Msg= new Msg('Operazione effettuata',201,`Stato partita : ${partita.stato}. Puoi verificare lo stato da terminale`);
+                        const msg:Msg= new Msg('Operazione effettuata',200,`Stato partita : ${partita.stato}. Puoi verificare lo stato da terminale`);
                         return  msg
                     }else{
                         const error:Errore = new Errore('Errore nel recupero della partita',415);
@@ -86,5 +127,22 @@ const statoPartita= async(req:Request)=>{
 
 }
 
-const utenteController = {visualizza_utenti,ricarica,statoPartita};
+
+const classifica = async() =>{
+    const classifica = await Partita.findAll({
+      attributes: [
+        'id_giocatore',
+        [fn('COUNT', literal("CASE WHEN stato = 'Win' THEN 1 ELSE NULL END")), 'numero_vittorie']
+      ],
+      group: ['id_giocatore'],
+      order: [[literal('numero_vittorie'), 'DESC']],
+      raw: true
+    });
+    console.log(classifica)
+    const classific = JSON.stringify(classifica)   
+    const msg:Msg= new Msg('Operazione effettuata',200,`Ecco la classifica:  ${classific}`);
+    return msg
+}
+
+const utenteController = {visualizza_utenti,ricarica,statoPartita,visualizzaPartitaUtente,classifica};
 export default utenteController
