@@ -36,10 +36,8 @@ const creaPartita = async(req:Request):Promise<Msg>=>{
         const err:Errore = new Errore('Errore nella selezione del livello,body invalido',403)
         throw err;
       }    
-
+      // Sia l'asciboard che le mosse disponibili sono inseriti in un array in cui ogni elemento e' una riga. Più leggibile 
       const stringArray:string[] = game.moves.map(obj => JSON.stringify(obj));
-
-
       const asciboard = game.asciiBoard();
       const l = asciboard.split("\n");
       const lines=l.concat(stringArray)
@@ -62,7 +60,7 @@ const creaPartita = async(req:Request):Promise<Msg>=>{
 
 
 
-
+// Funzione che ritonala mossa da parte dell'Ia in base alla difficoltà della partita
 export const getMoveForAI = async (game: any, level: string): Promise<MossaI> => {
     // Crea un giocatore IA a seconda del livello
     let aiPlayer;
@@ -139,14 +137,17 @@ const abbandona = async(req:any)=>{
 
 const visualizza_storico= async (req:Request)=>{
   try{
+    // Ricerca la partita da cui prendere lo storico delle mosse
     const partita = await Partita.findOne({attributes:['stato_partita'], where:{id_match:req.params.id_match,id_giocatore:req.id_giocatore},raw:true});
     if (partita){
+      // Recupera stringa Json contenente le info sullo storico
       const data = JSON.parse(partita.stato_partita);
+      // Riconverte in stringa solo lo storico
       const dati = JSON.stringify(data.history.moves);
       let storico:string = dati.replace(/\\"/g, '"');
       storico = storico.replace(/,"/g, ' ');
       let storicoArr:string[] = storico.split(",");
-      const msg:Msg= new Msg('Operazione effettuata',201,storicoArr);
+      const msg:Msg= new Msg('Operazione effettuata',200,storicoArr);
       return msg
     }else{
       const error:Errore = new Errore('Partita non trovata',404);

@@ -8,10 +8,10 @@ import {  EnglishDraughts as Draughts,  EnglishDraughtsComputerFactory as Comput
 import { Op, literal,fn } from "sequelize";
 
 
-
+// Visualizza tutti gli utenti, utile per monitorare la quantità residua di token
 const visualizza_utenti = async (res:Response):Promise<Msg> => {
     try {
-        const users = await utente.findAll({raw:true});  // SELECT * FROM Users
+        const users = await utente.findAll({raw:true}); 
         const utenti:string= JSON.stringify(users);
         const msg:Msg= new Msg('Operazione effettuata',200,utenti);
           return msg
@@ -21,20 +21,18 @@ const visualizza_utenti = async (res:Response):Promise<Msg> => {
                 console.log(error.message)
                 const msg:Msg= new Msg('Errore',error.statusCode,error.message); 
                 return msg 
-                }else{
+            }else{
                 return new Msg('Errore', 500, 'errore sconosciuto');
-                }
+            }
         }
 }
 
 
-
+// Cerca le partite di un giocatore filtrate per la data, le partite saranno quelle tra la data di inizio e di fine
 const visualizzaPartitaUtente = async (req:Request,res:Response) => {
     try{
-        //console.log(typeof req.body.dataInizio);
         const inizioGiorno = new Date(`${req.body.dataInizio}T00:00:00.000Z`);
         const fineGiorno = new Date(`${req.body.dataFine}T23:59:59.999Z`);
-        console.log(inizioGiorno)
         const partite = await Partita.findAll({
             attributes: ['id_match','stato','livello'],
             raw: true,
@@ -64,7 +62,7 @@ const visualizzaPartitaUtente = async (req:Request,res:Response) => {
 
 }
 
-
+// Funzione utile per l'admin, usata per ricaricare la quantità di token per un dato utente con rioli player
 const ricarica = async(req:Request)=>{
     try{
         await utente.increment('q_token', {by:req.body.ricaricaToken, where: {e_mail: req.body.e_mail}});
@@ -84,6 +82,8 @@ const ricarica = async(req:Request)=>{
 
 }
 
+
+// Valuta lo stato della partita, se è in corso recupera l'asciboard e le mosse disponibili
 const statoPartita= async(req:Request)=>{
     try{
         if(req.params.id_match){
@@ -96,17 +96,12 @@ const statoPartita= async(req:Request)=>{
                     if(partita.stato_partita){
                         const dati = JSON.parse(partita.stato_partita)
                         let game = Draughts.setup(dati.engine,dati.history);
-
                         const stringArray:string[] = game.moves.map(obj => JSON.stringify(obj));
-
-
                         const asciboard = game.asciiBoard();
                         const l = asciboard.split("\n");
                         const lines=l.concat(stringArray)
-
                         const msg:Msg= new Msg('Operazione effettuata',200,lines);
                         return msg
-
                     }else{
                         const error:Errore = new Errore('Errore nel recupero della partita',415);
                         throw error
@@ -139,7 +134,7 @@ const statoPartita= async(req:Request)=>{
 
 }
 
-
+// Compone la classifica dei giocatori con più vittorie in ordine decresecente
 const classifica = async() =>{
     const classifica = await Partita.findAll({
       attributes: [

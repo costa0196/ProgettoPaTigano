@@ -60,14 +60,10 @@ const avanzamentoGioco = async (req:Request) => {
                 //console.log(game.moves)
           }
         }    
-
       const stringArray:string[] = game.moves.map(obj => JSON.stringify(obj));
-
-
       const asciboard = game.asciiBoard();
       const l = asciboard.split("\n");
       const lines=l.concat(stringArray)
-
       const msg:Msg= new Msg('Operazione effettuata',200,lines);
       return msg
     }else{

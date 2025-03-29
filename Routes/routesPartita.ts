@@ -5,7 +5,7 @@ import controllerMossa from "../controllers/mossaController";
 import controllerMatch from "../controllers/matchController"
 import { Request,Response } from "express";
 
-
+// Router che gestisce le rotte degli utenti relative alla partita, al gioco in sè.
 const router = express.Router()
 const middlwareCreaPartita= [validate.validate_tokenResiduo,validate.validate_partite_in_corso,validate.validate_body_CreaPartita,validate.validate_livello];
 const middlewareMossa= [validate.validateRecuperaPartita,validate.validate_body_Mossa,validate.validateOrigin,validate.validateDestination,validate.validateCaptures,validate.validateMossa]

@@ -71,7 +71,7 @@ const validate_partite_in_corso =  async (req:Request,res:Response,next:NextFunc
     }
 }
 
-
+// Controlla che il body della richiesta Crea Partita sia ben formato
 const validate_body_CreaPartita = (req:Request,res:Response,next:NextFunction)=>{
     try{
         if(req.body && Object.keys(req.body).length===1 && Object.keys(req.body)[0]==='livello'){
@@ -102,6 +102,7 @@ const validate_livello=(req:Request,res:Response,next:NextFunction)=>{
 
 }
 
+// Controlla che il body della richiesta RicercaPartitaData sia ben formato
 const validate_body_RicercaPartite = (req:Request,res:Response,next:NextFunction)=>{
     try{
         if(req.body && Object.keys(req.body).length===2 && Object.keys(req.body)[0]==='dataInizio' && Object.keys(req.body)[1]==='dataFine'){
@@ -117,7 +118,7 @@ const validate_body_RicercaPartite = (req:Request,res:Response,next:NextFunction
 }
 
 
-
+// Controlla che il body della richiesta Ricarica sia ben formato
 const validate_body_Ricarica = (req:Request,res:Response,next:NextFunction)=>{
     try{
         if(req.body && Object.keys(req.body).length===2 && Object.keys(req.body)[0]==='e_mail'&& Object.keys(req.body)[1]==='ricaricaToken'){
@@ -159,6 +160,7 @@ const validateRecuperaPartita= async(req:Request,res:Response,next:NextFunction)
 
 }
 
+// Controlla che il body della richiesta Utente/Partita/Mossa sia ben formato
 const validate_body_Mossa = (req:Request,res:Response,next:NextFunction)=>{
     try{
         if(req.body && Object.keys(req.body).length===3 && Object.keys(req.body)[0]==='origin' && Object.keys(req.body)[1]==='destination' && Object.keys(req.body)[2]==='captures'){
@@ -340,22 +342,8 @@ const validate_tokenRicarica= async(req:Request,res:Response,next:NextFunction)=
 }
 
 
-const checkbodyDate = (req:Request,res:Response,next:NextFunction)=>{
-    try{
-        if(req.body.dataInizio && req.body.dataFine){
-            next()
-        }else{
-            let error:Errore = new Errore('Data inizio o fine non specificato',400);
-            next(error)
-        }
-    }catch{
-        let error:Errore = new Errore('Bad request',404);
-        next(error)
-    }
-}
 
-
-
+// Verifica che le date siano passate come stringhe
 const typeDate =(req:Request,res:Response,next:NextFunction)=>{
     try{
         if(typeof req.body.dataInizio === "string" && typeof req.body.dataFine === "string"){
@@ -371,7 +359,7 @@ const typeDate =(req:Request,res:Response,next:NextFunction)=>{
 
 }
 
-
+// Verifica che le stringhe passate come date siano rappresentino effettivamente delle date
 const validDate =(req:Request,res:Response,next:NextFunction)=>{
     try{
         const inizioGiorno = new Date(`${req.body.dataInizio}T00:00:00.000Z`);
@@ -390,7 +378,7 @@ const validDate =(req:Request,res:Response,next:NextFunction)=>{
 
 }
 
-
+// Verifica che la data inserita come fine ricerca sia successiva alla da di inizio di ricerca
 const checkInizioFine =(req:Request,res:Response,next:NextFunction)=>{
     try{
         const inizioGiorno = new Date(`${req.body.dataInizio}T00:00:00.000Z`);
@@ -409,7 +397,7 @@ const checkInizioFine =(req:Request,res:Response,next:NextFunction)=>{
 
 }
 
-
+//Verifica che la data di di inizio ricerca sia inferiore alla data attuale
 const checkdataFutura =(req:Request,res:Response,next:NextFunction)=>{
     try{
         const inizioGiorno = new Date(`${req.body.dataInizio}T00:00:00.000Z`);
@@ -430,5 +418,5 @@ const checkdataFutura =(req:Request,res:Response,next:NextFunction)=>{
 
 
 
-const validate = {validate_partite_in_corso,validate_tokenResiduo,validateRecuperaPartita,validateMossa,validate_livello,validateOrigin,validateDestination,validateCaptures,validate_mailUtente,validate_tokenRicarica,validateAdmin,checkbodyDate,typeDate,validDate,checkInizioFine,checkdataFutura,validate_body_CreaPartita,validate_body_Mossa,validate_body_Ricarica,validate_body_RicercaPartite}
+const validate = {validate_partite_in_corso,validate_tokenResiduo,validateRecuperaPartita,validateMossa,validate_livello,validateOrigin,validateDestination,validateCaptures,validate_mailUtente,validate_tokenRicarica,validateAdmin,typeDate,validDate,checkInizioFine,checkdataFutura,validate_body_CreaPartita,validate_body_Mossa,validate_body_Ricarica,validate_body_RicercaPartite}
 export default validate

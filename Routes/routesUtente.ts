@@ -4,14 +4,16 @@ import validate from "../Middleware/validate";
 import auth from "../Middleware/auth";
 import controllerUtente from '../controllers/utentiController';
 import controllerMatch from '../controllers/matchController';
-import routerPartite from './Partita';
+import routerPartite from './routesPartita';
 
+// Router usato per gestire le rotte degli utenti, si definiscono gli array di funzioni di middlware per ogni rotta gestita dal router
+// Personalizzando così i middlware di ogni rotta
 const router = express.Router()
 router.use('/Partita',routerPartite)
 const middlewareRicarica = [auth.checkToken,auth.validateUtente,validate.validate_body_Ricarica,validate.validateAdmin,validate.validate_mailUtente,validate.validate_tokenRicarica]
 const middlewareVisualizzaStorico = [auth.checkToken,auth.validateUtente,validate.validate_tokenResiduo]
 const middlewareVisualizzaStatoPartita = [auth.checkToken,auth.validateUtente,validate.validate_tokenResiduo]
-const middlwarePartitaData = [auth.checkToken,auth.validateUtente,validate.validate_tokenResiduo,validate.validate_body_RicercaPartite,validate.checkbodyDate,validate.typeDate,validate.validDate,validate.checkInizioFine,validate.checkdataFutura]
+const middlwarePartitaData = [auth.checkToken,auth.validateUtente,validate.validate_tokenResiduo,validate.validate_body_RicercaPartite,validate.typeDate,validate.validDate,validate.checkInizioFine,validate.checkdataFutura]
 
 
 
