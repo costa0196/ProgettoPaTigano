@@ -137,9 +137,9 @@ Permette di visualizzare la classifica degli utenti ordinata in base al numero d
 
 
 ## SequeceDiagaram
-![Diagramma delle sequenze](./Utility/Diagrammi/DiagrammaSequenze.png)
+![Diagramma delle sequenze](./Utility/Diagrammi/Sequence.png)
 
-Il diagramma delle sequenze risulta essere circa uguale per tutte le rotte. Dunque è stata riportata quella relativa alla creazione della partita e una ad una get come esempio.
+Il diagramma delle sequenze risulta essere circa uguale per tutte le rotte. Dunque è stata riportata quella relativa alla creazione della partita come esempio e anche l'operazione di mostrare la classifica poichè è l'unica che non ha bisogno di identificazione.
 
 ## Pattern
 
