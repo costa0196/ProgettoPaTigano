@@ -42,11 +42,11 @@ const visualizzaPartitaUtente = async (req:Request,res:Response):Promise<Msg> =>
               },
               id_giocatore: req.id_giocatore 
             }
-          });
-          const partita:string= JSON.stringify(partite);
+        });
+        const partita:string= JSON.stringify(partite);
 
-          const msg:Msg= new Msg('Operazione effettuata',200,partita);
-          return msg
+        const msg:Msg= new Msg('Operazione effettuata',200,partita);
+        return msg
 
     }catch(error){
         if(error instanceof Errore){

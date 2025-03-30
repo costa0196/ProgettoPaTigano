@@ -118,7 +118,6 @@ const abbandona = async(req:any):Promise<Msg>=>{
     }
 
   }catch(err:unknown){
-    //const err:Errore = new Errore('Errore nella creazione della partita, utente non trovato',404)
     if(err instanceof Errore){
       const msg:Msg= new Msg('Errore',err.statusCode,err.message);   
       console.log(err.stack)

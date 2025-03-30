@@ -45,7 +45,7 @@ Tutte le richieste devono essere validate e autorizzate mediante tokenJwt ad esc
 | Get     | /Utenti/visualizzaClassifica| Player| No |
 
 I tokenJwt sono stati genererati attraverso il seguente link: https://jwt.io/. La scadenza dei TokenJwt  nel campo "exp" è stata calcolata al seguente link: https://www.unixtimestamp.com/.
-Ecco un esempio di payload per l'autentificazione valido per tutte le rotte:
+Ecco un esempio di payload per l'autentificazione valido per tutte le rotte (ad esclusione della get per la classifica):
 ```json
 {
   "ruolo": "player",
@@ -56,7 +56,7 @@ Ecco un esempio di payload per l'autentificazione valido per tutte le rotte:
 L'algoritmo scelto per l'header è : HS256
 
 ### • /Utenti/Partita/CreaPartita 
-Dà la possibilità all'utente di creare una nuova partita. Il body della richiesta deve contenere una campo "livello" a cui dovrà essere associato un valore: facile,medio,difficile. Viene così creata una partita con il livello specificato, viene settato come valore dello stato della partita: "in corso" e viene scalata la quantità di token relativa all'uente che ha effettuato la richiesta. Inoltre, creando la partita, l'Ia effettua già la prima mossa e lo stato del gioco viene salvato.
+Dà la possibilità all'utente di creare una nuova partita. Il body della richiesta deve contenere una campo "livello" a cui dovrà essere associato un valore: facile,medio,difficile. Viene così creata una partita con il livello specificato; viene settato come valore dello stato della partita: "in corso" e viene scalata la quantità di token relativa all'uente che ha effettuato la richiesta. Inoltre, creando la partita, l'Ia effettua già la prima mossa e lo stato del gioco viene salvato.
 Affinchè la richiesta sia valida:
 - Il body deve contenere solo il campo livello.
 - Il valore del livello può essere solo un valore tra: facile, medio, difficile.
@@ -69,30 +69,66 @@ Esempio body corretto:
 }
 ```
 
-### • /Mossa
-Permette di effettuare una nuova mossa relativa ad una partita in corso specificando: l'origine,la destinazione e le catture della mossa. Dove origine e destinazione indicano la casella di partenza e di arrivo della pedina; captures indica le eventuali caselle in cui la pedina ha effettuato una cattura.
+### • /Utenti/Partita/:id_match/Mossa
+Permette di effettuare una nuova mossa relativa ad una partita in corso specificando: origine, destinazione e le catture della mossa. Dove origine e destinazione indicano la casella di partenza e di arrivo della pedina; captures indica le eventuali caselle in cui la pedina ha effettuato una cattura. Se la mossa è una mossa ammissibile per la partita, si ricostruisce il gioco riprendendolo dall'ultima mossa dell'Ia, si aggiorna la quantità di Token disponibile da parte del Player e infine si valuta se la partita è terminata o meno dopo la mossa del Player. Infine, si salva lo stato della partita e solo se la partita è terminata si cambia llo stato della partita da "In corso" a Win o Lose.
+Esempio body corretto:
+```json
+{
+    "origin":29,
+    "destination":20,
+    "captures":[24]
+}
+```
 Per la validazione:
-- Verifica che la mossa è associata all'utente autorizzato e controlla se esiste tale partita.
-- Verifica che l'origine della mossa sia valida.
-- Verifica che la destinazione della mossa sia valida.
-- Verifica che le catture della mossa siano valide.
-- Verifica che la mossa sia ammissibile per il giocatore.
-Payload token jwt identico per la rotta CreaAsta
-### • /Abbandona
-Permette di abbandonare una data partita specificata nel body della richiesta.
+- Il body deve avere solo e soltanto i tre campi inerenti.
+- Verifica che il campo origin sia un numero e che sia compreso tra 0 e 31, estremi inclusi.
+- Verifica che il campo destination sia un numero compreso tra 0 e 32, estremi inclusi.
+- Verifica che ohni elemento della cattura sia un numero ammissibile.
+- Verifica che la mossa sia ammissibile per il giocatore e per lo stato attuale del gioco.
 
-### • /Ricarica
+### • /Utenti/Partita/:id_match/Abbandona
+Permette di abbandonare una data partita di un certo Player. Rwcupera lo stato della partita e esso è settato a "In corso", lo modifica in "Interrotta" e decrementa il punteggio del relativo Player.
+Affinchè la richiesta sia valida, l'uente deve avere una quantità di token maggiore di 0.15.
+
+### • /Utenti/Ricarica
 Permetta all'utente Admin di ricaricare la una data quantità di token per un certo giocatore.
-- Verifica se l'e-mail appartiene ad un giocatore registrato sul database.
-- Verifica che la quantità di ricarica sia valida.
+Esempio body corretto:
+```json
+{
+    "e_mail":"costa@gmail.com",
+    "ricaricaToken":3
+}
+```
+- Verifica se il body della richiesta è corretto; esso deve contenere solo il campo e_mail e qToken.
+- Verifica che il ruolo sia adatto; Ruolo:Admin.
+- Verifica che la mail sia associata ad un utente Player e che sia una sreinga.
+- Verifica che i token da ricaricare siano un numero maggiore di 0.
 
-### • /visualizzaStorico
-Permette di visualizzare lo storico per una data partita.
+### • /Utenti/:id_match/visualizzaStorico
+Permette di visualizzare lo storico per una data partita per un certo utente. In particolare accede alla parte dello stat Partita inerente alle mosse effettuate durante la partita. Affinchè sia valida la richiesta, la quantità di Token del Player deve essere maggiore di 0.15.
 
-### • /visualizzaStatoPartita
-Permette la visualizzazione dello stato di una partita. Esso può essere: Win,Lose,Interrotta,In corso.
+### • /Utenti/:id_match/visualizzaStatoPartita
+Permette la visualizzazione dello stato di una partita. Esso può essere: Win,Lose,Interrotta,In corso. Risponde con un messaggio che descrive lo stato. Solo nel caso in cui lo stato è: "In corso", il messaggio di risposta riprende lo stato di gioco e mostra le mosse disponibili per la partita. Affinchè sia valida la quantità di token del Player deve essere maggiore di 0.15.
 
-Inoltre sono state create altre due ulteriori rotte:/visualizzaPartite e /visualizzaUtenti per rendere più semplice la lettura di alcune specifiche. Tali rotte hanno sempre un'autorizzazione tramite tokenJwt.
+### • /Utenti/visualizzaPartiteUtente
+
+Permette di visualizzare le partite di un certo utente filtrandole per data: Data inizio e data fine. 
+Esempio body corretto:
+```json
+{
+    "dataInizio":"2025-03-28",
+    "dataFine":"2025-03-30"
+}
+```
+Affinchè la richiesta si avalida:
+- Il body della richiesta deve avere solo e soltanto i due campi indicati.
+- Le date devono essere stringhe.
+- Le date devono essere convertite correttamente nel tipo Date.
+- Le date devono essere ordinate cronologicamente e coerenti.
+
+### • /Utenti/visualizzaClassifica
+Permette di visualizzare la classifica degli utenti ordinata in base al numero di vittorie. Questa rotta è l'unica che non ha bisogno di autentificazione. Se non ci sono partite con vittorie da parte degli utenti, non mostra una classifica, ma solo un messaggio che in cui si denota che non ci sono partite.
+
 
 # Progettazione
 ## UseCaseDiagram
