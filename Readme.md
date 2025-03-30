@@ -34,7 +34,7 @@ Tutte le richieste devono essere validate e autorizzate mediante tokenJwt ad esc
 ## Rotte
 
 | Tipo        | Rotta | Ruolo | Autentificazione JWT |
-|---------|----|
+|---------|----|----|----|
 | Post    | /Utenti/Partita/CreaPartita | Player| Si |
 | Post    | /Utenti/Partita/:id_match/Mossa | Player| Si |
 | Post    | /Utenti/Partita/Abbandona | Player| Si |
