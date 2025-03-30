@@ -101,7 +101,7 @@ const visualizza_partite = async (res:Response):Promise<Msg> => {
 }
 
 
-const abbandona = async(req:any)=>{
+const abbandona = async(req:any):Promise<Msg>=>{
   try{
     const partita=await Partita.findOne({where:{id_match:req.params.id_match,stato:'In corso',id_giocatore:req.id_giocatore}});
     if(partita!==null){
@@ -135,7 +135,7 @@ const abbandona = async(req:any)=>{
 
 
 
-const visualizza_storico= async (req:Request)=>{
+const visualizza_storico= async (req:Request):Promise<Msg>=>{
   try{
     // Ricerca la partita da cui prendere lo storico delle mosse
     const partita = await Partita.findOne({attributes:['stato_partita'], where:{id_match:req.params.id_match,id_giocatore:req.id_giocatore},raw:true});

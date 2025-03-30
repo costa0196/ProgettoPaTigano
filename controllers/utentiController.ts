@@ -29,7 +29,7 @@ const visualizza_utenti = async (res:Response):Promise<Msg> => {
 
 
 // Cerca le partite di un giocatore filtrate per la data, le partite saranno quelle tra la data di inizio e di fine
-const visualizzaPartitaUtente = async (req:Request,res:Response) => {
+const visualizzaPartitaUtente = async (req:Request,res:Response):Promise<Msg> => {
     try{
         const inizioGiorno = new Date(`${req.body.dataInizio}T00:00:00.000Z`);
         const fineGiorno = new Date(`${req.body.dataFine}T23:59:59.999Z`);
@@ -63,7 +63,7 @@ const visualizzaPartitaUtente = async (req:Request,res:Response) => {
 }
 
 // Funzione utile per l'admin, usata per ricaricare la quantità di token per un dato utente con rioli player
-const ricarica = async(req:Request)=>{
+const ricarica = async(req:Request):Promise<Msg>=>{
     try{
         await utente.increment('q_token', {by:req.body.ricaricaToken, where: {e_mail: req.body.e_mail}});
         const msg:Msg= new Msg('Operazione effettuata',200,'Ricarica avvenuta con successo');
@@ -84,7 +84,7 @@ const ricarica = async(req:Request)=>{
 
 
 // Valuta lo stato della partita, se è in corso recupera l'asciboard e le mosse disponibili
-const statoPartita= async(req:Request)=>{
+const statoPartita= async(req:Request):Promise<Msg>=>{
     try{
         if(req.params.id_match){
             const partita = await Partita.findOne({attributes:['stato','stato_partita'],where:{id_giocatore:req.id_giocatore,id_match:req.params.id_match}});
@@ -135,20 +135,38 @@ const statoPartita= async(req:Request)=>{
 }
 
 // Compone la classifica dei giocatori con più vittorie in ordine decresecente
-const classifica = async() =>{
-    const classifica = await Partita.findAll({
-      attributes: [
-        'id_giocatore',
-        [fn('COUNT', literal("CASE WHEN stato = 'Win' THEN 1 ELSE NULL END")), 'numero_vittorie']
-      ],
-      group: ['id_giocatore'],
-      order: [[literal('numero_vittorie'), 'DESC']],
-      raw: true
-    });
-    const classific = JSON.stringify(classifica)   
-    const msg:Msg= new Msg('Operazione effettuata',200,`Ecco la classifica:  ${classific}`);
-    return msg
-}
+const classifica = async():Promise<Msg> =>{
+    try{
+        const classifica = await Partita.findAll({
+            attributes: [
+              'id_giocatore',
+              [fn('COUNT', literal("CASE WHEN stato = 'Win' THEN 1 ELSE NULL END")), 'numero_vittorie']
+            ],
+            group: ['id_giocatore'],
+            order: [[literal('numero_vittorie'), 'DESC']],
+            raw: true
+          });
+          console.log(classifica)
+          if (classifica!==null){
+            const classific = JSON.stringify(classifica)   
+            const msg:Msg= new Msg('Operazione effettuata',200,`Ecco la classifica:  ${classific}`);
+            return msg
+          }else{
+            const msg:Msg= new Msg('Operazione effettuata',200,'Non sono presenti partite!');
+            return msg
+          }
+
+      }catch(err:unknown){
+        if(err instanceof Errore){
+            const msg:Msg= new Msg('Errore',err.statusCode,err.message);   
+            console.log(err.stack)
+            return msg 
+          }else{
+            return new Msg('Errore', 500, 'Errore sconosciuto');
+          }
+      }
+    }
+
 
 const utenteController = {visualizza_utenti,ricarica,statoPartita,visualizzaPartitaUtente,classifica};
 export default utenteController

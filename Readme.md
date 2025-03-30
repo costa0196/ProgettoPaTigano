@@ -17,6 +17,9 @@ Il progetto è stato realizzato per gestire il gioco della dama inglese tra un u
     -	Per ogni partita vinta al giocatore si dà 1 punto; per ogni partita interrotta -0.5 punti;
 *	Creare una rotta per restituire lo storico delle mosse.
 *   Creare una rotta per permettere all'utente admin di ricaricare i token per un dato giocatore(fornisce e_mail)
+*   Consentire agli utenti di visualizzare le proprie partite filtrandole per data.
+*   Creare una rotta che coonsenta di visualizzare la classifica degli utenti ordinata per numero di vittorie.
+
 Tutte le richieste devono essere validate e autorizzate mediante tokenJwt.
 
 
