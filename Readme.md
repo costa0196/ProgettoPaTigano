@@ -37,15 +37,13 @@ Tutte le richieste devono essere validate e autorizzate mediante tokenJwt ad esc
 |---------|----|----|----|
 | Post    | /Utenti/Partita/CreaPartita | Player| Si |
 | Post    | /Utenti/Partita/:id_match/Mossa | Player| Si |
-| Post    | /Utenti/Partita/Abbandona | Player| Si |
+| Post    | /Utenti/Partita/:id_match/Abbandona | Player| Si |
 | Post    | /Utenti/Ricarica| Admin| Si |
-| Get     | /Utenti/visualizzaStorico| Player| Si |
-| Get     | /Utenti/visualizzaStatoPartita| Player| Si |
+| Get     | /Utenti/:id_match/visualizzaStorico| Player| Si |
+| Get     | /Utenti/:id_match/visualizzaStatoPartita| Player| Si |
 | Get     | /Utenti/visualizzaPartiteUtente| Player| Si |
 | Get     | /Utenti/visualizzaClassifica| Player| No |
 
-
-Tutte le rotte (ad eccezione della Get /Utenti/visualizzaClassifica) presenti hanno bisogno di autentificazione tramite TokenJwt. Il progetto considera un login già effettuato. 
 I tokenJwt sono stati genererati attraverso il seguente link: https://jwt.io/. La scadenza dei TokenJwt  nel campo "exp" è stata calcolata al seguente link: https://www.unixtimestamp.com/.
 Ecco un esempio di payload per l'autentificazione valido per tutte le rotte:
 ```json
@@ -57,13 +55,19 @@ Ecco un esempio di payload per l'autentificazione valido per tutte le rotte:
 ```
 L'algoritmo scelto per l'header è : HS256
 
-### • /CreaPartita
-Permette di creare una nuova asta, una volta autorizzata, fornendo come body della richiesta il livello(facile,medio,difficile).
-Per essere validata essa deve:
-- Verificare che i token residui dell'utente siano maggiori di 0.15.
-- Verificare che il giocatore non sia impegnato in un'altra partita in corso.
-- Verificare che il livello sia uno di quelli consentiti
-
+### • /Utenti/Partita/CreaPartita 
+Dà la possibilità all'utente di creare una nuova partita. Il body della richiesta deve contenere una campo "livello" a cui dovrà essere associato un valore: facile,medio,difficile. Viene così creata una partita con il livello specificato, viene settato come valore dello stato della partita: "in corso" e viene scalata la quantità di token relativa all'uente che ha effettuato la richiesta. Inoltre, creando la partita, l'Ia effettua già la prima mossa e lo stato del gioco viene salvato.
+Affinchè la richiesta sia valida:
+- Il body deve contenere solo il campo livello.
+- Il valore del livello può essere solo un valore tra: facile, medio, difficile.
+- La quantità dei token dell'utente che effettua la richiesta deve essere maggiore della quantità richiesta per creare la partita.
+- L'utente non deve avere altre partite in corso. 
+Esempio body corretto:
+```json
+{
+  "livello": "facile"
+}
+```
 
 ### • /Mossa
 Permette di effettuare una nuova mossa relativa ad una partita in corso specificando: l'origine,la destinazione e le catture della mossa. Dove origine e destinazione indicano la casella di partenza e di arrivo della pedina; captures indica le eventuali caselle in cui la pedina ha effettuato una cattura.

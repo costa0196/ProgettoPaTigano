@@ -27,7 +27,7 @@ const creaPartita = async(req:Request):Promise<Msg>=>{
         const dati = JSON.stringify(data)
 
         // Scrive sul db la nuova partita con lo stato della partita dopo la prima mossa dell'Ia
-        await Partita.create({ stato: 'In corso', livello: req.body.livello,totmosse_tPlayer:0,win:null,interr:null,esito:null,id_giocatore:req.id_giocatore,stato_partita:dati});
+        await Partita.create({ stato: 'In corso', livello: req.body.livello,id_giocatore:req.id_giocatore,stato_partita:dati});
         const init:number=0.15;
         const token_aggiornato:number = req.q_token-init;
         await Utente.update({ q_token: token_aggiornato },{where: {id_giocatore:req.id_giocatore,},},);
