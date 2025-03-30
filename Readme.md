@@ -18,9 +18,9 @@ Il progetto è stato realizzato per gestire il gioco della dama inglese tra un u
 *	Creare una rotta per restituire lo storico delle mosse.
 *   Creare una rotta per permettere all'utente admin di ricaricare i token per un dato giocatore(fornisce e_mail)
 *   Consentire agli utenti di visualizzare le proprie partite filtrandole per data.
-*   Creare una rotta che coonsenta di visualizzare la classifica degli utenti ordinata per numero di vittorie.
+*   Creare una rotta che consenta di visualizzare la classifica degli utenti ordinata per numero di vittorie.
 
-Tutte le richieste devono essere validate e autorizzate mediante tokenJwt.
+Tutte le richieste devono essere validate e autorizzate mediante tokenJwt ad esclusione della richiesta di visualizzazione della classifica.
 
 
 ## Librerie/Framework
@@ -33,23 +33,26 @@ Tutte le richieste devono essere validate e autorizzate mediante tokenJwt.
 
 ## Rotte
 
-| Tipo        | Rotta 
+| Tipo        | Rotta | Ruolo | Autentificazione JWT |
 |---------|----|
-| Post    | /CreaAsta |
-| Post    | /Mossa |
-| Post    | /Abbandona |
-| Post    | /Ricarica|
-| Get     | /visualizzaStorico|
-| Get     | /visualizzaStatoPartita|
+| Post    | /Utenti/Partita/CreaPartita | Player| Si |
+| Post    | /Utenti/Partita/:id_match/Mossa | Player| Si |
+| Post    | /Utenti/Partita/Abbandona | Player| Si |
+| Post    | /Utenti/Ricarica| Admin| Si |
+| Get     | /Utenti/visualizzaStorico| Player| Si |
+| Get     | /Utenti/visualizzaStatoPartita| Player| Si |
+| Get     | /Utenti/visualizzaPartiteUtente| Player| Si |
+| Get     | /Utenti/visualizzaClassifica| Player| No |
 
 
-Tutte le rotte presenti hanno bisogno di autentificazione tramite TokenJwt. Il progetto considera un login già effettuato. 
-I tokenJwt sono stati genererati attraverso il seguente link: https://jwt.io/ . 
+Tutte le rotte (ad eccezione della Get /Utenti/visualizzaClassifica) presenti hanno bisogno di autentificazione tramite TokenJwt. Il progetto considera un login già effettuato. 
+I tokenJwt sono stati genererati attraverso il seguente link: https://jwt.io/. La scadenza dei TokenJwt  nel campo "exp" è stata calcolata al seguente link: https://www.unixtimestamp.com/.
 Ecco un esempio di payload per l'autentificazione valido per tutte le rotte:
 ```json
 {
   "ruolo": "player",
-  "id_giocatore": 3
+  "id_giocatore": 3,
+  "exp": 1743321790
 }
 ```
 L'algoritmo scelto per l'header è : HS256
