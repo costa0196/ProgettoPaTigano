@@ -5,9 +5,7 @@ services:
     container_name: my-app
     restart: unless-stopped
     ports:
-      - "${PORT}:${PORT}"  # Usa la variabile dal file .env
-    volumes:
-      - .:/app
+      - "${PORT}:${PORT}" 
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
