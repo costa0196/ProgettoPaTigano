@@ -133,7 +133,7 @@ Permette di visualizzare la classifica degli utenti ordinata in base al numero d
 # Progettazione
 ## UseCaseDiagram
 
-![DiagrammaUseCase](./Utility/Diagrammi/UseCaseDiagram.png)
+![DiagrammaUseCase](./Utility/Diagrammi/DiagramUseCase.png)
 
 
 ## SequeceDiagaram
